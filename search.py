@@ -100,7 +100,7 @@ def depthFirstSearch(problem):
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
-from util import Queue
+
     currentState = []
     currentPath = []
     visited = []
