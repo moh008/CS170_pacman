@@ -295,14 +295,17 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return self.startingPosition, ()
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        if len(state[1]) == 4:
+            return True
+        else:
+            return False
 
     def getSuccessors(self, state):
         """
@@ -320,12 +323,26 @@ class CornersProblem(search.SearchProblem):
             # Add a successor state to the successor list if the action is legal
             # Here's a code snippet for figuring out whether a new position hits a wall:
             #   x,y = currentPosition
+            x, y = state[0]
             #   dx, dy = Actions.directionToVector(action)
+            dx, dy = Actions.directionToVector(action)
             #   nextx, nexty = int(x + dx), int(y + dy)
+            nextx, nexty = int(x + dx), int(y + dy)
             #   hitsWall = self.walls[nextx][nexty]
-
+            hitsWall = self.walls[nextx][nexty]
+            #   list of corners
+            visited = state[1]
+            #   append visited to the visited corners
+            visitedCorners = list(visited)
+            
+            if not hitsWall:
+                nextState = (nextx, nexty)  #position that is not a wall
+                if nextState in self.corners:
+                    if nextState not in visited:
+                        visitedCorners.append(nextState)
+                successors.append(((nextState, visitedCorners), action, 1))
             "*** YOUR CODE HERE ***"
-
+            
         self._expanded += 1 # DO NOT CHANGE
         return successors
 
