@@ -288,6 +288,7 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
+        self.startingGameState = startingGameState
 
     def getStartState(self):
         """
@@ -378,36 +379,25 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
-    currentPos = state[0]
-    """make a list for unvisited corners"""
-    unvisited_corners = []
+    xy0 = problem.startingGameState
+    xy1 = state[0]
+    xy2 = corners[0]
+    xy3 = corners[1]
+    xy4 = corners[2]
+    xy5 = corners[3]
     a = 0
-    
-    """if a corner is unvisited, store into the unvisited list"""
-    for corner in corners:  
-        if not corner in state[1]:
-            unvisited_corners.append(corner)
-    
-    """store the shortest manhattandistance of all pair of unvisited corners"""
-    while unvisited_corners:    
-        distance, corner = min((util.manhattanDistance(currentPos, corner), corner) for corner in unvisited_corners)
-        a += distance
-        """change the current position to a visited corner, and remove the visited corner from unvisited_corner list"""
-        currentPos = corner     
-        unvisited_corners.remove(corner)
-        
-    return a
-    """
-    if xy2 not in state[1]:
-        a = max(a, util.manhattanDistance(xy1, xy2))
-    if xy3 not in state[1]:
-        a = max(a, util.manhattanDistance(xy1, xy3))
-    if xy4 not in state[1]:
-        a = max(a, util.manhattanDistance(xy1, xy4))
-    if xy5 not in state[1]:
-        a = max(a, util.manhattanDistance(xy1, xy5))
-    """
 
+    if xy2 not in state[1]:
+        a = max(a,mazeDistance(xy1, xy2, xy0))
+    if xy3 not in state[1]:
+        a = max(a,mazeDistance(xy1, xy3, xy0))
+    if xy4 not in state[1]:
+        a = max(a,mazeDistance(xy1, xy4, xy0))
+    if xy5 not in state[1]:
+        a = max(a,mazeDistance(xy1, xy5, xy0))
+
+    return a
+    
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
     def __init__(self):
@@ -500,6 +490,19 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
+    foodH = 0
+    foodList = foodGrid.asList()
+    food = []
+
+    if len(foodList) == 0:
+        foodH = 0
+    else:
+        for i in foodList:
+           #food.append(util.manhattanDistance(i, state[0] ))
+            food.append(mazeDistance(i, state[0], problem.startingGameState ))
+        foodH = max(food)
+
+    return foodH
     return 0
 
 class ClosestDotSearchAgent(SearchAgent):
