@@ -498,12 +498,10 @@ def foodHeuristic(state, problem):
         foodH = 0
     else:
         for i in foodList:
-           #food.append(util.manhattanDistance(i, state[0] ))
             food.append(mazeDistance(i, state[0], problem.startingGameState ))
         foodH = max(food)
 
     return foodH
-    return 0
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
@@ -533,8 +531,7 @@ class ClosestDotSearchAgent(SearchAgent):
         walls = gameState.getWalls()
         problem = AnyFoodSearchProblem(gameState)
 
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return search.breadthFirstSearch(problem)
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -568,9 +565,12 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         complete the problem definition.
         """
         x,y = state
-
+        """If the position of pacman is equal to any of food position"""
+        if state in self.food.asList():
+            return True
+        else:
+            return False
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
 
 def mazeDistance(point1, point2, gameState):
     """
